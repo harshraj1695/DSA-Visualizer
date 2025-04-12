@@ -1327,4 +1327,3 @@ export default function LinkedListVisualizer() {
     </div>
   )
 }
-
