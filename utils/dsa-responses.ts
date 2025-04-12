@@ -461,7 +461,7 @@ export function generateGenericResponse(query: string): string {
   const responses = [
     `I don't have specific information about "${query}" in my local database. As a DSA assistant, I can help with common algorithms and data structures like sorting algorithms, trees, graphs, and complexity analysis. Could you ask about one of these topics instead?`,
 
-    `I'm currently operating with limited capabilities due to API restrictions. I don't have detailed information about "${query}" in my local database. I can help with common DSA topics like arrays, linked lists, trees, sorting algorithms, and search algorithms. Would you like to know about any of these?`,
+    `I'm currently operating with limited capabilities due to API restrictions. I don't have detailed information about "${query}" in my local database. I can help with common DSA topics liketrees, sorting algorithms, graph and heap. Would you like to know about any of these?`,
 
     `I don't have specific information about "${query}" at the moment. I can provide explanations about fundamental DSA concepts like time complexity, space complexity, common data structures (arrays, linked lists, trees, graphs), and algorithms (sorting, searching, dynamic programming). Would you like to learn about any of these instead?`,
   ]

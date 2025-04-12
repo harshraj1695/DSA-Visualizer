@@ -1,4 +1,3 @@
-import { StreamingTextResponse } from "ai"
 import { findBestResponse, generateGenericResponse } from "@/utils/dsa-responses"
 
 export const runtime = "nodejs"
@@ -39,26 +38,28 @@ export async function POST(req: Request) {
   // Handle simple greetings directly
   if (isSimpleGreeting(lastMessage)) {
     const greeting = generateGreetingResponse()
-    return new StreamingTextResponse(
-      new ReadableStream({
-        start(controller) {
-          controller.enqueue(new TextEncoder().encode(greeting))
-          controller.close()
-        },
+    return new Response(
+      JSON.stringify({
+        reply: greeting,
       }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      },
     )
   }
 
   // Try to find a local response first
   const localResponse = findBestResponse(lastMessage)
   if (localResponse) {
-    return new StreamingTextResponse(
-      new ReadableStream({
-        start(controller) {
-          controller.enqueue(new TextEncoder().encode(localResponse))
-          controller.close()
-        },
+    return new Response(
+      JSON.stringify({
+        reply: localResponse,
       }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      },
     )
   }
 
@@ -70,13 +71,14 @@ export async function POST(req: Request) {
     if (!apiKey || apiKey.trim() === "") {
       // No API key, use generic response
       const genericResponse = generateGenericResponse(lastMessage)
-      return new StreamingTextResponse(
-        new ReadableStream({
-          start(controller) {
-            controller.enqueue(new TextEncoder().encode(genericResponse))
-            controller.close()
-          },
+      return new Response(
+        JSON.stringify({
+          reply: genericResponse,
         }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        },
       )
     }
 
@@ -134,13 +136,14 @@ Focus on being educational and making complex concepts easy to understand.`
 
       // Generate a generic response
       const genericResponse = generateGenericResponse(lastMessage)
-      return new StreamingTextResponse(
-        new ReadableStream({
-          start(controller) {
-            controller.enqueue(new TextEncoder().encode(genericResponse))
-            controller.close()
-          },
+      return new Response(
+        JSON.stringify({
+          reply: genericResponse,
         }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        },
       )
     }
 
@@ -150,27 +153,29 @@ Focus on being educational and making complex concepts easy to understand.`
 
     console.log("Hugging Face API response received successfully")
 
-    // Return the response as a streaming response
-    return new StreamingTextResponse(
-      new ReadableStream({
-        start(controller) {
-          controller.enqueue(new TextEncoder().encode(generatedText))
-          controller.close()
-        },
+    // Return the response as a regular JSON response
+    return new Response(
+      JSON.stringify({
+        reply: generatedText,
       }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      },
     )
   } catch (error) {
     console.error("Error in chat API:", error)
 
     // Fall back to generic response for any error
     const genericResponse = generateGenericResponse(lastMessage)
-    return new StreamingTextResponse(
-      new ReadableStream({
-        start(controller) {
-          controller.enqueue(new TextEncoder().encode(genericResponse))
-          controller.close()
-        },
+    return new Response(
+      JSON.stringify({
+        reply: genericResponse,
       }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      },
     )
   }
 }

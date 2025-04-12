@@ -1,7 +1,5 @@
 "use client"
 
-import type React from "react"
-
 import { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Bot, X, Minimize2, Maximize2, Send, AlertCircle } from "lucide-react"
@@ -10,7 +8,6 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Avatar } from "@/components/ui/avatar"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { useChat } from "ai/react"
 import { Spinner } from "@/components/ui/spinner"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
@@ -25,14 +22,12 @@ export default function AIAssistant() {
   const [isMinimized, setIsMinimized] = useState(false)
   const [showWelcome, setShowWelcome] = useState(true)
   const [showLimitedModeNotice, setShowLimitedModeNotice] = useState(true)
+  const [input, setInput] = useState("")
+  const [messages, setMessages] = useState<Message[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<Error | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  // Initialize chat without initial messages
-  const { messages, input, handleInputChange, handleSubmit, isLoading, error } = useChat({
-    api: "/api/chat",
-  })
-
-  // Combine welcome message with actual messages when needed
   const displayMessages = showWelcome
     ? [
         {
@@ -45,7 +40,6 @@ export default function AIAssistant() {
       ]
     : messages
 
-  // Hide welcome message after first user message
   useEffect(() => {
     if (messages.length > 0 && messages[0].role === "user") {
       setShowWelcome(false)
@@ -58,19 +52,45 @@ export default function AIAssistant() {
     }
   }, [displayMessages])
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (input.trim()) {
-      handleSubmit(e)
+    const trimmedInput = input.trim()
+    if (!trimmedInput) return
+
+    const newUserMessage: Message = {
+      id: Date.now().toString(),
+      role: "user",
+      content: trimmedInput,
+    }
+
+    setMessages((prev) => [...prev, newUserMessage])
+    setInput("")
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: [...messages, newUserMessage] }),
+      })
+
+      const data = await res.json()
+
+      const newAssistantMessage: Message = {
+        id: `${Date.now()}-bot`,
+        role: "assistant",
+        content: data.reply || "Sorry, I couldn't find a good response.",
+      }
+
+      setMessages((prev) => [...prev, newAssistantMessage])
+    } catch (err: any) {
+      console.error(err)
+      setError(err)
+    } finally {
+      setIsLoading(false)
     }
   }
-
-  // Check if error is related to API limits
-  const isApiLimitError =
-    error &&
-    (error.message.includes("exceeded your monthly included credits") ||
-      error.message.includes("API Key Error") ||
-      error.message.includes("Invalid credentials"))
 
   return (
     <>
@@ -149,11 +169,13 @@ export default function AIAssistant() {
                           className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
                         >
                           <div
-                            className={`max-w-[80%] rounded-lg px-3 py-2 ${
-                              message.role === "user" ? "bg-indigo-500 text-white" : "bg-gray-100 dark:bg-gray-800"
+                            className={`max-w-[80%] rounded-lg px-3 py-2 text-sm ${
+                              message.role === "user"
+                                ? "bg-indigo-500 text-white"
+                                : "bg-gray-100 dark:bg-gray-800"
                             }`}
                           >
-                            <p className="whitespace-pre-line text-sm">{message.content}</p>
+                            <p className="whitespace-pre-line">{message.content}</p>
                           </div>
                         </div>
                       ))}
@@ -164,7 +186,7 @@ export default function AIAssistant() {
                           </div>
                         </div>
                       )}
-                      {error && !isApiLimitError && (
+                      {error && (
                         <div className="flex justify-center">
                           <div className="max-w-[80%] rounded-lg px-3 py-2 bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 text-sm">
                             Error: {error.message || "Failed to load response"}
@@ -176,11 +198,11 @@ export default function AIAssistant() {
                   </ScrollArea>
                 </CardContent>
                 <CardFooter className="p-3 border-t">
-                  <form onSubmit={onSubmit} className="flex w-full gap-2">
+                  <form onSubmit={handleSubmit} className="flex w-full gap-2">
                     <Input
                       placeholder="Ask about any algorithm..."
                       value={input}
-                      onChange={handleInputChange}
+                      onChange={(e) => setInput(e.target.value)}
                       className="flex-grow"
                       disabled={isLoading}
                     />
