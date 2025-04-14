@@ -151,7 +151,7 @@ export default function AIAssistant() {
                         <Alert className="bg-amber-50 border-amber-200 dark:bg-amber-900/20 dark:border-amber-800">
                           <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
                           <AlertDescription className="text-xs text-amber-800 dark:text-amber-300">
-                            Running in limited mode with pre-defined responses for common DSA topics.
+                            Running in limited mode with pre-defined responses for common DSA topics as the API Limit Exceded.
                             <Button
                               variant="link"
                               className="text-xs p-0 h-auto text-amber-800 dark:text-amber-300 underline"

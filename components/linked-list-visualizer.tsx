@@ -13,7 +13,13 @@ type ListNode = {
   state?: "default" | "highlighted" | "inserted" | "found" | "deleted" | "current"
 }
 
-export default function LinkedListVisualizer() {
+// Update the component props interface or add it if it doesn't exist
+interface LinkedListVisualizerProps {
+  isDoublyLinked?: boolean
+}
+
+// Update the component definition to use the prop
+export default function LinkedListVisualizer({ isDoublyLinked = false }: LinkedListVisualizerProps) {
   const [linkedList, setLinkedList] = useState<ListNode[]>([])
   const [inputValue, setInputValue] = useState("")
   const [positionValue, setPositionValue] = useState("")
@@ -288,7 +294,7 @@ export default function LinkedListVisualizer() {
 
     // Draw linked list
     drawLinkedList(ctx, canvas.width, canvas.height)
-  }, [linkedList, animatingNode, animationPosition])
+  }, [linkedList, animatingNode, animationPosition, isDoublyLinked])
 
   const drawLinkedList = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
     if (linkedList.length === 0) return
@@ -355,6 +361,12 @@ export default function LinkedListVisualizer() {
       ctx.textAlign = "center"
       ctx.textBaseline = "middle"
       ctx.fillText(node.value.toString(), x, y)
+
+      // Render backward pointers or indicate bidirectional connections
+      if (isDoublyLinked && index > 0) {
+        const prevX = startX + (index - 1) * nodeSpacing
+        drawArrow(ctx, x - nodeRadius, y, prevX + nodeRadius, y)
+      }
     })
 
     // Draw animating node if exists
@@ -1098,6 +1110,9 @@ export default function LinkedListVisualizer() {
 
   return (
     <div className="space-y-6">
+      <h2 className="text-2xl font-bold mb-4">
+        {isDoublyLinked ? "Doubly Linked List Visualization" : "Linked List Visualization"}
+      </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-4">
           <div className="flex flex-col gap-2">

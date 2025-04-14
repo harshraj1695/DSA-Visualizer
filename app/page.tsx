@@ -104,6 +104,27 @@ export default function Home() {
     },
   ]
 
+  // Add a new entry for doubly linked list in the dsaInfo array after the linkedlist entry
+
+  // Find the linkedlist entry in dsaInfo array
+  const linkedListIndex = dsaInfo.findIndex((item) => item.id === "linkedlist")
+
+  // Add the new doubly linked list entry after the linkedlist entry
+  dsaInfo.splice(linkedListIndex + 1, 0, {
+    id: "doublylinkedlist",
+    title: "Doubly Linked List",
+    description:
+      "A linear data structure where each node contains data and pointers to both the next and previous nodes.",
+    icon: "🔄",
+    operations: [
+      { name: "Insert (beginning)", timeComplexity: "O(1)", spaceComplexity: "O(1)" },
+      { name: "Insert (end)", timeComplexity: "O(1)", spaceComplexity: "O(1)" },
+      { name: "Delete (any position)", timeComplexity: "O(1)", spaceComplexity: "O(1)" },
+      { name: "Search", timeComplexity: "O(n)", spaceComplexity: "O(1)" },
+      { name: "Reverse", timeComplexity: "O(n)", spaceComplexity: "O(1)" },
+    ],
+  })
+
   const handleVisualize = (tabId: string) => {
     setActiveTab(tabId)
     setShowLanding(false)
@@ -123,7 +144,7 @@ export default function Home() {
           transition={{ duration: 0.5 }}
           className="text-center mb-12"
         >
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4 ">
+          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4">
             Data Structures & Algorithms Visualizer
           </h1>
           <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-lg">
@@ -272,6 +293,14 @@ export default function Home() {
                 >
                   Linked List
                 </TabsTrigger>
+                {/* Add a new TabsTrigger for doubly linked list in the Tabs component */}
+                {/* Find the TabsList component and add a new TabsTrigger after the linkedlist TabsTrigger */}
+                <TabsTrigger
+                  value="doublylinkedlist"
+                  className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700"
+                >
+                  Doubly Linked List
+                </TabsTrigger>
                 <TabsTrigger value="tree" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700">
                   Tree
                 </TabsTrigger>
@@ -298,6 +327,11 @@ export default function Home() {
                 </TabsContent>
                 <TabsContent value="linkedlist" className="mt-0">
                   <LinkedListVisualizer />
+                </TabsContent>
+                {/* Add a new TabsContent for doubly linked list */}
+                {/* Find the TabsContent components and add a new one after the linkedlist TabsContent */}
+                <TabsContent value="doublylinkedlist" className="mt-0">
+                  <LinkedListVisualizer isDoublyLinked={true} />
                 </TabsContent>
                 <TabsContent value="tree" className="mt-0">
                   <TreeVisualizer />
