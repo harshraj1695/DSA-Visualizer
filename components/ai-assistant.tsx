@@ -223,16 +223,61 @@ export default function AIAssistant() {
       </AnimatePresence>
 
       {!isOpen && (
-        <motion.button
+        <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
-          onClick={() => setIsOpen(true)}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+          className="fixed bottom-6 right-6 z-50"
         >
-          <Bot size={24} />
-        </motion.button>
+          <motion.button
+            className="flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+            onClick={() => setIsOpen(true)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            initial={{ width: "auto" }}
+            animate={{
+              width: "auto",
+              transition: { duration: 0.3 },
+            }}
+          >
+            <motion.div
+              initial={{ rotate: 0 }}
+              animate={{
+                rotate: [0, -10, 10, -10, 10, 0],
+                transition: {
+                  repeat: Number.POSITIVE_INFINITY,
+                  repeatDelay: 5,
+                  duration: 1.5,
+                  ease: "easeInOut",
+                },
+              }}
+            >
+              <Bot size={24} />
+            </motion.div>
+            <motion.span
+              initial={{ opacity: 0, width: 0 }}
+              animate={{
+                opacity: 1,
+                width: "auto",
+                transition: { delay: 0.5, duration: 0.3 },
+              }}
+              className="font-medium whitespace-nowrap"
+            >
+              Ask DSA Assistant
+            </motion.span>
+          </motion.button>
+          <motion.div
+            className="absolute -top-2 -right-2 h-4 w-4 bg-green-500 rounded-full"
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.7, 1, 0.7],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "easeInOut",
+            }}
+          />
+        </motion.div>
       )}
     </>
   )
