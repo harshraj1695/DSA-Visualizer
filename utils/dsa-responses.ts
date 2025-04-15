@@ -434,6 +434,172 @@ export const dsaResponses: Record<string, string> = {
 - Creating a matrix: O(n²) space`,
 
   // Add more DSA topics as needed
+  // Additional DSA Responses
+"floyd warshall": `Floyd-Warshall is an algorithm for finding shortest paths between all pairs of vertices in a weighted graph.
+
+**How it works:**
+1. Initialize a distance matrix with weights of direct edges
+2. For each vertex k, update the distance between every pair (i, j)
+   - dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
+
+**Time Complexity:** O(V³)
+**Space Complexity:** O(V²)
+
+**Use Cases:**
+- All-pairs shortest path
+- Detecting negative weight cycles
+- Routing protocols`,
+
+"kruskal": `Kruskal's Algorithm is a greedy algorithm to find the Minimum Spanning Tree (MST) of a graph.
+
+**How it works:**
+1. Sort all edges in non-decreasing order of weight
+2. Pick the smallest edge and check if it forms a cycle using Union-Find
+3. If it doesn't, include it in the MST
+4. Repeat until MST has V-1 edges
+
+**Time Complexity:** O(E log E)
+**Space Complexity:** O(V)
+
+**Use Cases:**
+- Network design
+- Clustering algorithms`,
+
+"prim": `Prim's Algorithm is a greedy algorithm that finds the Minimum Spanning Tree (MST) for a connected weighted graph.
+
+**How it works:**
+1. Start with any node and add the smallest edge that connects to an unvisited node
+2. Repeat until all nodes are included
+
+**Time Complexity:**
+- With priority queue: O(E log V)
+**Space Complexity:** O(V)
+
+**Use Cases:**
+- Designing least cost network
+- Minimum cost to connect cities`,
+
+"topological sort": `Topological Sort is an ordering of vertices in a Directed Acyclic Graph (DAG) such that for every directed edge u → v, u comes before v.
+
+**How it works:**
+1. Perform DFS and push nodes to stack after visiting all neighbors
+2. Or use Kahn’s algorithm with in-degrees and a queue
+
+**Time Complexity:** O(V + E)
+**Space Complexity:** O(V)
+
+**Use Cases:**
+- Task scheduling
+- Build systems (compilation order)
+- Course prerequisite resolution`,
+
+"sliding window": `Sliding Window is an optimization technique to reduce nested loops to a single loop in problems involving arrays or strings.
+
+**How it works:**
+1. Maintain a window of elements that satisfy a condition
+2. Slide the window by moving the left or right pointer
+3. Update the result accordingly
+
+**Time Complexity:** O(n) in most optimized cases
+
+**Use Cases:**
+- Longest substring without repeating characters
+- Maximum sum of k consecutive elements
+- Count anagrams in a string`,
+
+"two pointers": `The Two Pointers technique uses two indices to solve problems on arrays or strings efficiently.
+
+**How it works:**
+- One pointer starts at the beginning, the other at the end
+- Move pointers based on a condition to converge
+
+**Time Complexity:** O(n)
+
+**Use Cases:**
+- Finding pairs with a given sum in a sorted array
+- Reversing a string or array
+- Removing duplicates from a sorted array`,
+
+"kadane's algorithm": `Kadane's Algorithm is used to find the maximum subarray sum in a one-dimensional array.
+
+**How it works:**
+1. Initialize max_so_far and max_ending_here to first element
+2. Iterate through the array:
+   - max_ending_here = max(current_element, max_ending_here + current_element)
+   - max_so_far = max(max_so_far, max_ending_here)
+
+**Time Complexity:** O(n)
+**Space Complexity:** O(1)
+
+**Use Cases:**
+- Stock market profit problems
+- Subarray problems
+- Finding contiguous segments with maximum total`,
+
+"prefix sum": `Prefix Sum is a technique to preprocess cumulative sums of an array for efficient range queries.
+
+**How it works:**
+1. Create a prefix array where prefix[i] = prefix[i - 1] + arr[i]
+2. To get sum of subarray from i to j: prefix[j] - prefix[i - 1]
+
+**Time Complexity:**
+- Preprocessing: O(n)
+- Query: O(1)
+
+**Use Cases:**
+- Range sum queries
+- Counting subarrays
+- Efficient sum checks`,
+
+"trie": `A Trie (prefix tree) is a tree-based data structure used to efficiently store and retrieve keys in a dataset of strings.
+
+**Key Properties:**
+- Each node represents a character
+- Words end at leaf or special end marker
+
+**Time Complexity:**
+- Insert/Search/Delete: O(L) where L is length of the word
+
+**Use Cases:**
+- Auto-complete systems
+- Spell checking
+- IP routing
+- Word games`,
+
+"backtracking": `Backtracking is an algorithmic paradigm for solving constraint satisfaction problems by exploring all potential options and abandoning those that fail.
+
+**How it works:**
+1. Try all possible options for the current step
+2. If a step leads to a solution, continue
+3. If not, backtrack and try the next option
+
+**Time Complexity:** Depends on branching factor and depth
+**Space Complexity:** O(depth) for recursion
+
+**Use Cases:**
+- Sudoku solver
+- N-Queens problem
+- Combinatorial problems (permutations, subsets)`,
+
+"union find": `Union-Find (Disjoint Set Union) is a data structure to keep track of disjoint sets and quickly merge and check connectivity.
+
+**Operations:**
+- find(x): Returns root of x
+- union(x, y): Merges sets containing x and y
+
+**Optimizations:**
+- Path Compression
+- Union by Rank
+
+**Time Complexity:** O(α(n)) ≈ O(1) with optimizations
+
+**Use Cases:**
+- Cycle detection in graphs
+- Kruskal's MST
+- Network connectivity
+- Grouping problems`,
+
+
 }
 
 // Function to find the best matching response
